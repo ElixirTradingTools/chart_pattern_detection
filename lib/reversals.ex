@@ -15,17 +15,13 @@ defmodule OhlcPatternDetection.Reversals do
 
   def normalize(reversals) do
     {max_h, min_l} =
-      E.reduce(reversals, {nil, nil}, fn
-        {:hi, %{h: h = %D{}}}, {nil, min} -> {h, min}
-        {:lo, %{l: l = %D{}}}, {max, nil} -> {max, l}
-        {:hi, %{h: h = %D{}}}, {max, min} -> {D.max(max, h), min}
-        {:lo, %{l: l = %D{}}}, {max, min} -> {max, D.min(min, l)}
+      E.reduce(reversals, {"NaN", "NaN"}, fn
+        {:hi, %{h: h = %D{}}}, {max_h, min_l} -> {D.max(max_h, h), min_l}
+        {:lo, %{l: l = %D{}}}, {max_h, min_l} -> {max_h, D.min(min_l, l)}
       end)
 
     {_, %{t: max_t}} = L.first(reversals)
     {_, %{t: min_t}} = L.last(reversals)
-
-    IO.inspect({max_h, min_l, max_t, min_t})
 
     E.map(reversals, fn {side, %{h: h, l: l, t: t}} ->
       {side,
