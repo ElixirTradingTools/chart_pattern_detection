@@ -1,9 +1,9 @@
-defmodule OhlcPatternDetection.MixProject do
+defmodule ChartPatternDetection.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :ohlc_pattern_detection,
+      app: :chart_pattern_detection,
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,

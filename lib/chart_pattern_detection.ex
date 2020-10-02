@@ -1,4 +1,4 @@
-defmodule OhlcPatternDetection do
+defmodule ChartPatternDetection do
   alias Decimal, as: D
   alias List, as: L
   alias Enum, as: E

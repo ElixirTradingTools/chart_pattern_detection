@@ -1,6 +1,6 @@
-defmodule OhlcPatternDetectionTest do
+defmodule ChartPatternDetectionTest do
   use ExUnit.Case
-  alias OhlcPatternDetection, as: PD
+  alias ChartPatternDetection, as: CPD
   alias Decimal, as: D
   alias Enum, as: E
 
@@ -118,18 +118,18 @@ defmodule OhlcPatternDetectionTest do
                  Map.merge(b, %{h: D.new(h), l: D.new(l), o: D.new(o), c: D.new(c)})
                end)
 
-  describe "OhlcPatternDetection" do
+  describe "ChartPatternDetection" do
     test "get_subsets/2" do
-      {:ok, subsets} = PD.get_subsets([1, 2, 3, 4, 5], 3)
+      {:ok, subsets} = CPD.get_subsets([1, 2, 3, 4, 5], 3)
 
       assert subsets == [[1, 2, 3, 4, 5], [1, 2, 3, 4], [1, 2, 3]]
     end
 
     test "get_reversals/1" do
       D.Context.with(%D.Context{precision: 2, rounding: :half_even}, fn ->
-        result = PD.reversals(@contrived_chart)
+        result = CPD.reversals(@contrived_chart)
         assert result == @contrived_result
-        assert PD.normalize(result) == @contrived_result_normalized
+        assert CPD.normalize(result) == @contrived_result_normalized
       end)
     end
 
@@ -147,10 +147,10 @@ defmodule OhlcPatternDetectionTest do
 
         normalized_subsets =
           @trend_chart
-          |> PD.reversals()
-          |> PD.get_subsets(15)
+          |> CPD.reversals()
+          |> CPD.get_subsets(15)
           |> (fn {:ok, result} -> result end).()
-          |> E.map(fn z -> z |> PD.normalize() |> PD.detect(tests) end)
+          |> E.map(fn z -> z |> CPD.normalize() |> CPD.detect(tests) end)
 
         IO.inspect(normalized_subsets)
       end)
